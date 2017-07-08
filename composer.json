@@ -1,0 +1,20 @@
+{
+  "name": "Import doctrine integration",
+  "description": "import doctrine integration",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/kscreamy/import-doctrine-integration"
+    }
+  ],
+  "require": {
+    "php" : ">=5.6",
+    "doctrine/orm": "*",
+    "kscreamy/import": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Screamy\\PriceImporter\\": "src/"
+    }
+  }
+}
