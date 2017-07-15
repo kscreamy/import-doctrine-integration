@@ -71,9 +71,11 @@ class DoctrineCategoryImportManager implements CategoryGatewayInterface
                 $category = $categoryRepository->find($categoryModel->getId());
                 $parentCategory = $categoryRepository->find($categoryModel->getParentId());
                 if (!$category->getParent() && $parentCategory) {
+
                     $category->setParent($parentCategory);
                 }
             }
+            $this->entityManager->flush();
             $this->entityManager->commit();
         } catch (\Exception $e) {
             $this->entityManager->rollback();

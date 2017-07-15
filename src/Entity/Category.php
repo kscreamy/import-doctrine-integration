@@ -7,28 +7,21 @@ use Doctrine\Common\Annotations as ORM;
 /**
  * Class Category
  * @package Screamy\PriceImporter\Entity
- * @ORM\Entity(table="category")
  */
 class Category
 {
     /**
      * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id
      */
     private $id;
 
     /**
      * @var Category
-     * @ORM\Column(type="integer", name="parent_id", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-    */
+     */
     private $parent;
 
     /**
      * @var string
-     * @ORM\Column(type="string", nullable=true)
      */
     private $title;
 

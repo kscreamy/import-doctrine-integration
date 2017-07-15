@@ -1,0 +1,23 @@
+Screamy\PriceImporter\Entity\PropertyValue:
+  type: entity
+  table: property_value
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    value:
+      type: string
+      length: 255
+      nullable: false
+  manyToOne:
+    property:
+      name: property_id
+      type: int
+      options:
+        unsigned: true
+      targetEntity: Screamy\PriceImporter\Entity\Property
+      joinColumn:
+        name: property_id
+        referencedColumnName: id

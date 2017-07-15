@@ -1,0 +1,52 @@
+Screamy\PriceImporter\Entity\Product:
+  type: entity
+  table: product
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    sku:
+      type: string
+      length: 255
+      unique: true
+    title:
+      type: string
+      length: 255
+      nullable: false
+    price:
+      type: float
+      nullable: false
+      options:
+        unsigned: true
+    imported:
+      type: boolean
+      nullable: false
+  manyToOne:
+    category:
+      type: integer
+      options:
+        unsigned: true
+      targetEntity: \Screamy\PriceImporter\Entity\Category
+      joinColumn:
+        name: category_id
+        referencedColumnName: id
+
+  manyToMany:
+    properties:
+      name: property_value_id
+      type: integer
+      options:
+        unsigned: true
+      targetEntity: Screamy\PriceImporter\Entity\PropertyValue
+      joinTable:
+        name: product_properties
+        joinColumns:
+          product_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          property_value_id:
+            referencedColumnName: id
+
+

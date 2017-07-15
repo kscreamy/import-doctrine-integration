@@ -1,0 +1,21 @@
+Screamy\PriceImporter\Entity\Category:
+  type: entity
+  table: category
+  id:
+    id:
+      type: integer
+  fields:
+    title:
+      type: string
+      length: 255
+      nullable: true
+  manyToOne:
+    parent:
+      type: int
+      nullable: true
+      options:
+        unsigned: true
+      targetEntity: \Screamy\PriceImporter\Entity\Category
+      joinColumn:
+        name: parent_id
+        referencedColumnName: id

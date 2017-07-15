@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
  */
 class Product
 {
+    private $id;
     /**
      * @var string
      */

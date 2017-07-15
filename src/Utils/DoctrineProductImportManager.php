@@ -16,7 +16,7 @@ use Screamy\PriceImporter\Repository\ProductRepository;
  * Class DoctrineImportManager
  * @package Screamy\PriceImporter\Utils
  */
-class DoctrineImportManager implements ProductPricesImportManagerInterface, ProductImportManagerInterface
+class DoctrineProductImportManager implements ProductPricesImportManagerInterface, ProductImportManagerInterface
 {
     /**
      * @var EntityManager
@@ -42,14 +42,15 @@ class DoctrineImportManager implements ProductPricesImportManagerInterface, Prod
          */
         $productRepository = $this->entityManager->getRepository(Product::class);
 
-        if ($productRepository->findOneBy($model->getSku())) {
+        if ($productRepository->findOneBy(['sku' => $model->getSku()])) {
             throw new \LogicException('Product with sku ' . $product->getSku() . ' already exists');
         }
 
         $category = $this->entityManager->find(Category::class, $model->getCategoryId());
 
         if (!$category) {
-            throw new \LogicException('Category with id ' . $model->getCategoryId() . ' not found');
+            return ;//category is not imported now
+            //throw new \LogicException('Category with id ' . $model->getCategoryId() . ' not found');
         }
 
         $this->entityManager->beginTransaction();
@@ -60,7 +61,7 @@ class DoctrineImportManager implements ProductPricesImportManagerInterface, Prod
             $product->setTitle($model->getTitle())
                 ->setImorted(false)
                 ->setCategory($category)
-                ->setPrice($this->getFirstPriceInfo($model->getPrices()));
+                ->setPrice($this->getFirstPriceInfo($model->getPrices())->getPrice());
 
             /**
              * @var ProductPropertyModel $propertyModel
