@@ -48,9 +48,9 @@ class Product
     private $createdAt;
 
     /**
-     * @var string
+     * @var array
      */
-    private $imagePath;
+    private $images;
 
     /**
      * @var int
@@ -69,6 +69,7 @@ class Product
     public function __construct($sku)
     {
         $this->properties = new ArrayCollection();
+        $this->images = [];
         $this->sku = $sku;
     }
 
@@ -187,20 +188,20 @@ class Product
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getImagePath()
+    public function getImages()
     {
-        return $this->imagePath;
+        return $this->images;
     }
 
     /**
-     * @param string $imagePath
+     * @param array $images
      * @return $this
      */
-    public function setImagePath($imagePath)
+    public function setImages($images)
     {
-        $this->imagePath = $imagePath;
+        $this->images = $images;
         return $this;
     }
 

@@ -21,10 +21,9 @@ Screamy\PriceImporter\Entity\Product:
       nullable: false
       options:
         unsigned: true
-    imagePath:
-      type: string
+    images:
+      type: array
       nullable: true
-      length: 1024
     quantity:
       type: integer
       nullable: false

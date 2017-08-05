@@ -1,6 +1,7 @@
 Screamy\PriceImporter\Entity\Category:
   type: entity
   table: price_import_category
+  repositoryClass: Screamy\PriceImporter\Repository\CategoryRepository
   id:
     id:
       type: integer

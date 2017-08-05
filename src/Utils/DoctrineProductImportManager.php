@@ -45,7 +45,7 @@ class DoctrineProductImportManager implements ProductPricesImportManagerInterfac
 
 
         if ($productRepository->findOneBy(['sku' => $model->getSku()])) {
-            throw new \LogicException('Product with sku ' . $product->getSku() . ' already exists');
+            throw new \LogicException('Product with sku ' . $model->getSku() . ' already exists');
         }
 
         /**
@@ -65,7 +65,7 @@ class DoctrineProductImportManager implements ProductPricesImportManagerInterfac
             $product->setTitle($model->getTitle())
                 ->setImorted(false)
                 ->setCategory($category)
-                ->setImagePath($model->getImagePath() ? $model->getImagePath() : null)
+                ->setImages($model->getImages() ? $model->getImages() : null)
                 ->setPrice($this->getFirstPriceInfo($model->getPrices())->getPrice())
                 ->setQuantity($model->getCount() ? $model->getCount() : 0);
 
