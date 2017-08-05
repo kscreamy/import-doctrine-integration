@@ -5,7 +5,6 @@ namespace Screamy\PriceImporter\Utils;
 use Doctrine\ORM\EntityManager;
 use Screamy\PriceImporter\Entity\Category;
 use Screamy\PriceImporter\Gateway\CategoryGatewayInterface;
-use Screamy\PriceImporter\Mapper\CategoryIterator;
 use Screamy\PriceImporter\Model\Category as CategoryModel;
 
 /**
@@ -31,17 +30,7 @@ class DoctrineCategoryImportManager implements CategoryGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function emitCategories(CategoryIterator $categories)
-    {
-        $this->saveCategories($categories);
-
-    }
-
-    /**
-     * @param CategoryIterator $categories
-     * @throws \Exception
-     */
-    private function saveCategories(CategoryIterator $categories)
+    public function emitCategories(array $categories)
     {
         $this->entityManager->beginTransaction();
         try {
@@ -69,15 +58,21 @@ class DoctrineCategoryImportManager implements CategoryGatewayInterface
                  * @var Category $category
                  */
                 $category = $categoryRepository->find($categoryModel->getId());
+                /**
+                 * @var Category $parentCategory
+                 */
                 $parentCategory = $categoryRepository->find($categoryModel->getParentId());
                 if (!$category->getParent() && $parentCategory) {
+
                     $category->setParent($parentCategory);
                 }
             }
+            $this->entityManager->flush();
             $this->entityManager->commit();
         } catch (\Exception $e) {
             $this->entityManager->rollback();
             throw $e;
         }
     }
+
 }

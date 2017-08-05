@@ -3,32 +3,32 @@
 namespace Screamy\PriceImporter\Entity;
 
 use Doctrine\Common\Annotations as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Class Category
  * @package Screamy\PriceImporter\Entity
- * @ORM\Entity(table="category")
  */
 class Category
 {
     /**
      * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id
      */
     private $id;
 
     /**
      * @var Category
-     * @ORM\Column(type="integer", name="parent_id", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-    */
+     */
     private $parent;
 
     /**
+     * @var Collection
+     */
+    private $children;
+
+    /**
      * @var string
-     * @ORM\Column(type="string", nullable=true)
      */
     private $title;
 
@@ -48,6 +48,7 @@ class Category
     {
         $this->id = $id;
         $this->parent = $parent;
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -86,7 +87,7 @@ class Category
 
     /**
      * @param string $title
-     * @param $this
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -100,5 +101,13 @@ class Category
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

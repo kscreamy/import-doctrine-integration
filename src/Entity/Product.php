@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
  */
 class Product
 {
+    private $id;
     /**
      * @var string
      */
@@ -47,6 +48,21 @@ class Product
     private $createdAt;
 
     /**
+     * @var string
+     */
+    private $imagePath;
+
+    /**
+     * @var int
+     */
+    private $quantity;
+
+    /**
+     * @var Brand
+     */
+    private $brand;
+
+    /**
      * Product constructor.
      * @param string $sku
      */
@@ -54,6 +70,14 @@ class Product
     {
         $this->properties = new ArrayCollection();
         $this->sku = $sku;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -160,5 +184,59 @@ class Product
     public function isImported()
     {
         return $this->imported;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImagePath()
+    {
+        return $this->imagePath;
+    }
+
+    /**
+     * @param string $imagePath
+     * @return $this
+     */
+    public function setImagePath($imagePath)
+    {
+        $this->imagePath = $imagePath;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     * @return $this
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
+    /**
+     * @return Brand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param Brand $brand
+     * @return $this
+     */
+    public function setBrand(Brand $brand)
+    {
+        $this->brand = $brand;
+        return $this;
     }
 }

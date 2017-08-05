@@ -2,8 +2,6 @@
 
 namespace Screamy\PriceImporter\Entity;
 
-use Screamy\PriceImporter\Entity\Property;
-
 /**
  * Class PropertyValue
  * @package Screamy\PriceImporter\Entity

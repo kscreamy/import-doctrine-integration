@@ -19,4 +19,12 @@ class ProductRepository extends EntityRepository
     {
         return $this->findOneBy(['sku' => $sku]);
     }
+
+    public function getProductsByIds(array $ids)
+    {
+        $qb =$this->createQueryBuilder('p');
+        $qb->where($qb->expr()->in('p.id', $ids));
+
+        return $qb->getQuery()->getResult();
+    }
 }

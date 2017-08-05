@@ -3,6 +3,7 @@
 namespace Screamy\PriceImporter\Utils;
 
 use Doctrine\ORM\EntityManager;
+use Screamy\PriceImporter\Entity\Brand;
 use Screamy\PriceImporter\Entity\Category;
 use Screamy\PriceImporter\Entity\Product;
 use Screamy\PriceImporter\Entity\Property;
@@ -16,7 +17,7 @@ use Screamy\PriceImporter\Repository\ProductRepository;
  * Class DoctrineImportManager
  * @package Screamy\PriceImporter\Utils
  */
-class DoctrineImportManager implements ProductPricesImportManagerInterface, ProductImportManagerInterface
+class DoctrineProductImportManager implements ProductPricesImportManagerInterface, ProductImportManagerInterface
 {
     /**
      * @var EntityManager
@@ -42,14 +43,17 @@ class DoctrineImportManager implements ProductPricesImportManagerInterface, Prod
          */
         $productRepository = $this->entityManager->getRepository(Product::class);
 
-        if ($productRepository->findOneBy($model->getSku())) {
-            throw new \LogicException('Product with sku ' . $product->getSku() . ' already exists');
+        if ($productRepository->findProductBySku($model->getSku())) {
+            return; //product already exists
         }
 
+        /**
+         * @var Category $category
+         */
         $category = $this->entityManager->find(Category::class, $model->getCategoryId());
 
         if (!$category) {
-            throw new \LogicException('Category with id ' . $model->getCategoryId() . ' not found');
+            return;//category is not imported now
         }
 
         $this->entityManager->beginTransaction();
@@ -60,7 +64,9 @@ class DoctrineImportManager implements ProductPricesImportManagerInterface, Prod
             $product->setTitle($model->getTitle())
                 ->setImorted(false)
                 ->setCategory($category)
-                ->setPrice($this->getFirstPriceInfo($model->getPrices()));
+                ->setImagePath($model->getImagePath() ? $model->getImagePath() : null)
+                ->setPrice($this->getFirstPriceInfo($model->getPrices())->getPrice())
+                ->setQuantity($model->getCount() ? $model->getCount() : 0);
 
             /**
              * @var ProductPropertyModel $propertyModel
@@ -70,6 +76,10 @@ class DoctrineImportManager implements ProductPricesImportManagerInterface, Prod
                     continue;
                 }
                 $product->addProperty($this->getProductProperty($propertyModel));
+            }
+
+            if ($model->getBrand()) {
+                $product->setBrand($this->getBrand($model));
             }
 
             $this->entityManager->persist($product);
@@ -142,5 +152,23 @@ class DoctrineImportManager implements ProductPricesImportManagerInterface, Prod
         }
 
         return $propertyValue;
+    }
+
+    /**
+     * @param ProductModel $product
+     * @return Brand
+     */
+    private function getBrand(ProductModel $product)
+    {
+        $brandRepository = $this->entityManager->getRepository(Brand::class);
+
+        $brand = $brandRepository->findOneBy(['title' => $product->getBrand()]);
+        if (!$brand) {
+            $brand = new Brand();
+            $brand->setTitle($product->getBrand());
+            $this->entityManager->persist($brand);
+        }
+
+        return $brand;
     }
 }
