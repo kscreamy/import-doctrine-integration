@@ -43,8 +43,9 @@ class DoctrineProductImportManager implements ProductPricesImportManagerInterfac
          */
         $productRepository = $this->entityManager->getRepository(Product::class);
 
-        if ($productRepository->findProductBySku($model->getSku())) {
-            return; //product already exists
+
+        if ($productRepository->findOneBy(['sku' => $model->getSku()])) {
+            throw new \LogicException('Product with sku ' . $product->getSku() . ' already exists');
         }
 
         /**
